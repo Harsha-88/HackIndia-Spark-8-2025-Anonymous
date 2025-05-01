@@ -9,11 +9,15 @@ Solution:
 
 Features:
 
--Upload PDF: Upload a PDF form (Aadhaar, Admit Card, etc.).
-         
-Auto-fill Fields: Specify which fields to auto-fill (e.g., Name, DOB, Email).
+Upload PDF: Upload any PDF form (e.g., Aadhaar, Admit Card).
 
--Download Completed Form: After auto-filling, the form can be downloaded with the filled data.
+Upload User Profile: Upload a user profile in JSON format, or use the default profile.
+
+Auto-fill Fields: Select fields to auto-fill from the uploaded PDF form (e.g., Name, DOB, Email).
+
+Preview and Download: View the autofilled form and download it as a text file.
+
+Smart Field Detection: Automatically detects potential fields in the uploaded PDF form.
 
 
 Technologies:
@@ -24,12 +28,21 @@ Hugging Face Transformers: To leverage LLMs for processing and filling form fiel
 
 pdfplumber: For extracting text from PDF documents.
 
+JSON: For handling user profiles.
 
-How it Works:
-1. Extract Text: Extract text from the uploaded PDF form.
-2. Match Fields: Match the fields to be filled with data from the user profile.
-3. Auto-fill: Automatically fill the specified fields with the profile data.
-4. Download: Download the auto-filled PDF form.
+
+How it works:
+Upload a PDF form in the sidebar.
+
+Upload a user profile in JSON format (or use the default profile).
+
+The fields in the PDF will be automatically detected.
+
+Select which fields you want to auto-fill.
+
+Click on "🚀 Auto-Fill Form" to generate the autofilled form.
+
+Preview the autofilled form and download it.
 
 Impact:
        This tool helps automate the filling of various forms like KYC, tax, visa, and educational forms, reducing manual effort, saving time, and minimizing errors.
