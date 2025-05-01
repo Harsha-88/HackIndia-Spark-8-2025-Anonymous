@@ -8,6 +8,7 @@ Solution:
          The LLM-Powered Form Filler allows users to upload PDF forms (like Aadhaar or Admit Cards), specify which fields they want to auto-fill, and then download the completed form. The form is automatically filled using the user’s pre-defined profile data (such as name, email, phone number, etc.).
 
 Features:
+
 -Upload PDF: Upload a PDF form (Aadhaar, Admit Card, etc.).
          
 Auto-fill Fields: Specify which fields to auto-fill (e.g., Name, DOB, Email).
@@ -16,9 +17,12 @@ Auto-fill Fields: Specify which fields to auto-fill (e.g., Name, DOB, Email).
 
 
 Technologies:
-            -Streamlit: For creating an interactive and user-friendly interface.
-            -Hugging Face Transformers: To leverage LLMs for processing and filling form fields.
-            -pdfplumber: For extracting text from PDF documents.
+
+Streamlit: For creating an interactive and user-friendly interface.
+
+Hugging Face Transformers: To leverage LLMs for processing and filling form fields.
+
+pdfplumber: For extracting text from PDF documents.
 
 
 How it Works:
