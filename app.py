@@ -5,12 +5,16 @@ import re
 import os
 
 st.set_page_config(page_title="LLM Form Filler", layout="centered")
-st.title("LLM-Powered Form Filler")
-st.markdown("Upload a PDF form and matching user JSON profile to auto-fill it using AI.")
+
+st.markdown("""
+    <h1 style='text-align: center; color: #4B8BBE;'>🤖 LLM-Powered Form Filler</h1>
+    <p style='text-align: center;'>Upload any PDF form and a user profile (JSON), and let AI auto-fill it for you!</p>
+    <hr style="border-top: 1px solid #bbb;">
+""", unsafe_allow_html=True)
 
 # Sample default user profile
 default_profile = {
-    "Name": "Harsha Parashar",
+    "Name": "xyz",
     "DOB": "15/08/2000",
     "Email": "harsha@example.com",
     "Phone": "+91-9876543210",
@@ -19,22 +23,25 @@ default_profile = {
     "Aadhaar": "1234-5678-9012"
 }
 
-# Upload section
-pdf_file = st.file_uploader("Upload PDF Form", type="pdf")
-json_file = st.file_uploader("Upload User Profile (.json)", type="json")
+# Upload Section
+st.sidebar.header("Upload Inputs")
+pdf_file = st.sidebar.file_uploader("📄 Upload PDF Form", type="pdf")
+json_file = st.sidebar.file_uploader("🧾 Upload User Profile (.json)", type="json")
 
-# Manual field input
-fields_input = st.text_input("Enter fields to autofill (comma-separated):", "Name, DOB, Email, Phone")
+# Smart field detection
+def detect_fields(text):
+    possible_fields = re.findall(r"([A-Za-z ]+):", text)
+    cleaned = sorted(set([f.strip() for f in possible_fields if len(f.strip()) > 2]))
+    return cleaned
 
-# Progress log window
+# Logging status
 log = st.empty()
-
 def log_step(msg):
-    log.markdown(f"**Status:** {msg}")
+    log.markdown(f"🟢 **Status:** {msg}")
 
 # Extract text from PDF
 def extract_text(pdf_file):
-    log_step("Extracting text from PDF...")
+    log_step("🔍 Extracting text from PDF...")
     text = ""
     with pdfplumber.open(pdf_file) as pdf:
         for page in pdf.pages:
@@ -43,9 +50,9 @@ def extract_text(pdf_file):
                 text += page_text + "\n"
     return text.strip()
 
-# Autofill matching fields from profile
+# Autofill fields
 def autofill_fields(fields, profile):
-    log_step("Matching fields with profile...")
+    log_step("✍️ Auto-filling fields using profile data...")
     filled_lines = []
     for field in fields:
         key = field.strip()
@@ -53,11 +60,16 @@ def autofill_fields(fields, profile):
         filled_lines.append(f"{key}: {value}")
     return "\n".join(filled_lines)
 
-# Main logic
-if st.button("Auto-Fill Form"):
-    if not pdf_file:
-        st.warning("No PDF uploaded. Using sample PDF not implemented yet.")
-        st.stop()
+# Main UI Logic
+if pdf_file:
+    extracted_text = extract_text(pdf_file)
+    suggested_fields = detect_fields(extracted_text)
+    st.success("✅ PDF loaded and fields detected!")
+
+    st.markdown("### ✏️ Select Fields to Auto-Fill")
+    selected_fields = st.multiselect("Suggested fields:", options=suggested_fields, default=suggested_fields[:4])
+
+    st.markdown("---")
 
     # Use uploaded profile or default
     if json_file:
@@ -70,11 +82,19 @@ if st.button("Auto-Fill Form"):
         user_profile = default_profile
         st.info("Using default profile.")
 
-    fields = [f.strip() for f in fields_input.split(",")]
-    text = extract_text(pdf_file)
-    filled_output = autofill_fields(fields, user_profile)
+    if st.button("🚀 Auto-Fill Form"):
+        if not selected_fields:
+            st.warning("Please select at least one field to fill.")
+        else:
+            filled_output = autofill_fields(selected_fields, user_profile)
+            st.success("🎉 Form filled successfully!")
 
-    log_step("Form filled successfully!")
-    st.success("Here is your autofilled form content:")
-    st.text_area("Autofilled Output", filled_output, height=300)
-    st.download_button("Download Filled Form", filled_output, file_name="autofilled_form.txt")
+            st.markdown("### 🔍 Preview")
+            st.text_area("Autofilled Output", filled_output, height=300)
+            st.download_button("⬇️ Download Filled Form", filled_output, file_name="autofilled_form.txt")
+
+else:
+    st.info("Please upload a PDF form from the sidebar to begin.")
+
+st.markdown("<hr style='border-top: 1px solid #bbb;'>", unsafe_allow_html=True)
+
