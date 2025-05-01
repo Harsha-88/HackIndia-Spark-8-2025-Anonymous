@@ -28,10 +28,11 @@ Hugging Face Transformers: To leverage LLMs for processing and filling form fiel
 
 pdfplumber: For extracting text from PDF documents.
 
-JSON: For handling user profiles.
+ JSON: For handling user profiles.
 
 
 How it works:
+
 Upload a PDF form in the sidebar.
 
 Upload a user profile in JSON format (or use the default profile).
